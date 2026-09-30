@@ -136,7 +136,7 @@ Chat notifications show normalized failure causes or allowlisted producer facts 
 
 #### Owner-conversation repair
 
-Repair is on by default. Upgrading changes what you see for owned automations that alert in chat: the first failure alert of a streak becomes a repair request in the conversation that created the job, and the alert is the fallback. Set `cron.failureAlert.repair: false` to keep alert-only behavior.
+Repair is on by default. Upgrading changes what you see for owned automations that alert in chat: the first failure alert of a streak becomes a repair request in the conversation that created the job, and the alert is the fallback. A job with `failureAlert: false` gets neither.
 
 When a job created from a conversation (it has an owner session) reaches its execution-failure alert threshold and the alert would go to chat (`announce` mode), OpenClaw posts a repair request into that owner conversation instead of sending the alert, and wakes it. The request names the job and includes its schedule, name, payload, and last error; the name, payload, and error are marked as untrusted data. The conversation's agent handles it as an ordinary turn: a transient outage needs nothing (it stays silent), fixable job logic gets fixed in the workspace (for example the helper script or instructions file the job follows) with a short note, and a change to the automation itself, or anything else that needs you, comes back as one concrete proposal you can approve with "go ahead". Command jobs and on-exit or stream schedules are operator-only and alert as before.
 

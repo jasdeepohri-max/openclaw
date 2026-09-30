@@ -189,7 +189,6 @@ export function resolveFailureAlert(
     accountId,
     threadId: primaryRouteMatches ? primaryAnnounceRoute.threadId : undefined,
     includeSkipped: jobConfig?.includeSkipped ?? globalConfig?.includeSkipped ?? false,
-    repair: globalConfig?.repair !== false,
     alternateRoute: alternateRoute !== null && !primaryRouteMatches,
   };
 }
@@ -367,7 +366,6 @@ export function maybeEmitFailureAlert(
   const job = cronNotificationJob(params.job);
   if (
     !repairRequested &&
-    alertConfig.repair &&
     alertConfig.mode === "announce" &&
     params.status === "error" &&
     params.job.owner?.sessionKey?.trim() &&

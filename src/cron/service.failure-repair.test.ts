@@ -101,18 +101,15 @@ describe("CronService failure repair", () => {
     });
   });
 
-  it.each([
-    { name: "no owner conversation", overrides: { owner: undefined }, config: { enabled: true } },
-    { name: "repair disabled", overrides: {}, config: { enabled: true, repair: false } },
-  ])("keeps the existing alert with $name", async ({ overrides, config }) => {
+  it("keeps the existing alert with no owner conversation", async () => {
     await withRepair(async ({ cron, sendCronFailureAlert, enqueueSystemEvent, addJob }) => {
-      const job = await addJob("plain sync", { ...owned, ...overrides });
+      const job = await addJob("plain sync", { ...owned, owner: undefined });
       await cron.run(job.id, "force");
       await cron.run(job.id, "force");
       expect(enqueueSystemEvent).not.toHaveBeenCalled();
       expect(sendCronFailureAlert).toHaveBeenCalledOnce();
       expect(cron.getJob(job.id)?.state.failureAlertIncident?.repair).toBeUndefined();
-    }, config);
+    });
   });
 
   it.each([
